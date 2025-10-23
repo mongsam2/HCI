@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { DotPadSDK } from "./DotPadSDK-1.0.0";
+import { Device } from "./device";
 import "./App.css";
 
 export default function DotPad() {
@@ -14,15 +15,11 @@ export default function DotPad() {
   const CELL20_TEXT_FULL =
     "19151E001E15190019151E001E15190019151E001E15190019151E001E151900";
 
-  // Device interface
-  interface Device {
-    target: null;
-    name: string;
-    connected: boolean;
-  }
 
   const dotpadsdk = useRef<DotPadSDK>(null);
   const [devices, setDevices] = useState<Device[]>([]);
+  const [animalIdx, setAnimalIdx] = useState<number>(0);
+  const [formIdx, setFormIdx] = useState<number>(0);
 
   useEffect(() => {
     dotpadsdk.current = new DotPadSDK();
@@ -214,6 +211,61 @@ export default function DotPad() {
             }}
           >
             Print Braille (Panning Button)
+          </button>
+          <button
+            className="selectButton"
+            onClick={() => {
+              handleCell20Reset();
+            }}
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+      <div className="container">
+            <div className="labelContainer">
+          <label>동물 이미지 출력 테스트</label>
+        </div>
+        <div className="buttonContainer">
+          <button
+            className="selectButton"
+            onClick={() => {
+              handleCell20Print(CELL20_TEXT_SHORT);
+            }}
+          >
+            포유류
+          </button>
+          <button
+            className="printButton"
+            onClick={() => {
+              handleCell20Print(CELL20_TEXT_FULL);
+            }}
+          >
+            조류
+          </button>
+          <button
+            className="printButton"
+            onClick={() => {
+              handleCell20Print(CELL20_TEXT_FULL);
+            }}
+          >
+            어류
+          </button>
+          <button
+            className="printButton"
+            onClick={() => {
+              handleCell20Print(CELL20_TEXT_FULL);
+            }}
+          >
+            파충류
+          </button>
+          <button
+            className="printButton"
+            onClick={() => {
+              handleCell20Print(CELL20_TEXT_FULL);
+            }}
+          >
+            곤충
           </button>
           <button
             className="selectButton"
