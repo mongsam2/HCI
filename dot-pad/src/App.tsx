@@ -1,18 +1,21 @@
-import { useEffect, useRef, useState } from "react";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Test from "./pages/Test";
 import Demo from "./pages/Demo";
-import { DotPadSDK } from "./DotPadSDK-1.0.0";
-import { Device } from "./device";
+import Navigation from "./pages/Navigation";
+import Dictionary from "./pages/Dictionary";
+import Navbar from "./components/Navbar";
 import "./App.css";
 
 export default function App() {
   return (
     <BrowserRouter>
-    <Routes>
-      <Route path="/test" element={<Test />} />
-      <Route path="/demo" element={<Demo />} />
-    </Routes>
-  </BrowserRouter>
-  )
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Navigation />} />
+        <Route path="/test" element={<Test />} />
+        <Route path="/demo" element={<Demo />} />
+        <Route path="/dictionary" element={<Dictionary />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
