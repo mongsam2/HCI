@@ -131,16 +131,6 @@ export default function DotPadDisplay({ mainData, subData }: DotPadDisplayProps)
           ))}
         </div>
       </div>
-
-      {/* 버튼 영역 */}
-      <div className="dotpad-buttons">
-        <button className="dotpad-btn">◀</button>
-        <button className="dotpad-btn">F1</button>
-        <button className="dotpad-btn">F2</button>
-        <button className="dotpad-btn">F3</button>
-        <button className="dotpad-btn">F4</button>
-        <button className="dotpad-btn">▶</button>
-      </div>
     </div>
   );
 };
