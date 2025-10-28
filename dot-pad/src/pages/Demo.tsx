@@ -1,5 +1,5 @@
 import React from "react";
-import DotPadDisplay from "../component/DotPadDisplay";
+import DotPadDisplay from "../components/DotPadDisplay";
 
 const Demo = () => {
   const subData = "000220000220000220000220000220000220";
