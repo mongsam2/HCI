@@ -38,6 +38,16 @@ export default function Navbar() {
         >
           Dictionary
         </NavLink>
+
+        <NavLink
+          to="/Quiz"
+          className={({ isActive }) =>
+            isActive ? "nav-item active" : "nav-item"
+          }
+          onClick={() => setMenuOpen(false)}
+        >
+          Quiz 
+        </NavLink>
       </nav>
     </header>
   );
