@@ -21,11 +21,49 @@ export default function Dictionary() {
   // 그림판에 표시할 데이터 상태 정의 (main : 그림용, sub : 텍스트용)
   const mainDisplayData = AnimalData({animalIdx, buttonName}); // AnimalData: 입력한 인덱스에 알맞는 정보를 반환
   const subDisplayData = "";
+
+  //페이지가 켜질 때 딱 한 번 실행
+  useEffect(() => { 
+    console.log("Dictionary 페이지 로드됨, SDK 초기화 시작") //디버깅용 로그
+
+    dotpadsdk.current = new DotPadSDK();    // SDK  인스턴스 생성
+    console.log("SDK 인스턴스 생성 완료:", dotpadsdk.current);
+
+  }, []);
+
+
+  // 버튼을 누를 때마다 동물 이미지를 새로 출력
+  useEffect(() => {
+    if (!devices[0]) return;
+    const data = AnimalData({animalIdx, buttonName});
+    handlePrintImage(data);
+  }, [animalIdx, buttonName])
+
+
+  dotpadsdk.current?.addListenerKeyEvent(devices[0], (keycode: string) => {
+    const mappingFunctionKey: Record<string, "f1" | "f2" | "f3" | "f4"> = {
+      "F1": "f1",
+      "F2": "f2",
+      "F3": "f3",
+      "F4": "f4", 
+    }
+    const mappingArrowKey: Record<string, "prev" | "next"> = {
+      "P1": "prev",
+      "P2": "next",
+    }
+    if (keycode in ["F1", "F2", "F3", "F4"]) {
+      onFunctionButtonClick(mappingFunctionKey[keycode]);
+    } else {
+      onArrowButtonClick(mappingArrowKey[keycode]);
+    }
+  })
   
+
   // f1 ~ f4 버튼을 눌렀을 때의 행동을 정의해놓은 함수
   const onFunctionButtonClick = (buttonName: "f1" | "f2" | "f3" | "f4") => {
     setButtonName(buttonName);
   }
+
   
   // 좌(prev), 우(next) 화살표를 눌렀을 때의 행동을 정의해놓은 함수
   const onArrowButtonClick = (buttonName: "prev" | "next") => {
@@ -36,17 +74,10 @@ export default function Dictionary() {
     }
   };
 
-  useEffect(() => { //페이지가 켜질 때 딱 한 번 실행
-    console.log("Dictionary 페이지 로드됨, SDK 초기화 시작") //디버깅용 로그
-
-    dotpadsdk.current = new DotPadSDK();    // SDK  인스턴스 생성
-    console.log("SDK 인스턴스 생성 완료:", dotpadsdk.current);
-
-  }, []);
 
   // 그래픽 출력 테스트 함수
-  const handlePrintImage = async () => {
-    console.log("펭귄 이미지 출력");
+  const handlePrintImage = async (mainDisplayData: string) => {
+    console.log("이미지 출력");
     const targetDevice = devices[0];
     
     //****** 실제 패드 연결시 사용할 부분 *****
@@ -59,6 +90,7 @@ export default function Dictionary() {
     }
 
   };
+
 
   // 설명글 출력 테스트 함수
   const handlePrintText = async () =>  {
@@ -75,6 +107,7 @@ export default function Dictionary() {
     }
 
   };
+  
 
   const handlePrintError = () => {
     console.error("기기를 못 찾음");
@@ -126,6 +159,44 @@ export default function Dictionary() {
   return (
       <div className="App">
         <h2>Dot Pad Display Test</h2>
+          <div className="buttonContainer">
+            <button className="selectButton" onClick={handleSelectDevice}>
+              Select DotPad
+            </button>
+          </div>
+          <table className="table">
+        <thead>
+          <tr>
+            <th className="header">DotPad Name</th>
+            <th className="header">Connect/Disconnect</th>
+          </tr>
+        </thead>
+        <tbody>
+          {devices.map((device) => (
+            <tr key={device.name} className="row">
+              <td className="cell">{device.name}</td>
+              <td className="cell">
+                {!device.connected && (
+                  <button
+                    className="button"
+                    onClick={() => updateDeviceConnection(device, true)}
+                  >
+                    Connect
+                  </button>
+                )}
+                {device.connected && (
+                  <button
+                    className="button"
+                    onClick={() => updateDeviceConnection(device, false)}
+                  >
+                    Disconnect
+                  </button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
         <DotPadDisplay mainData={mainDisplayData} subData={subDisplayData} />
         <DotPadButtons onArrowButtonClick={onArrowButtonClick} onFunctionButtonClick={onFunctionButtonClick} />
         <AnimalBlock animalIdx={animalIdx} buttonName={buttonName} />
